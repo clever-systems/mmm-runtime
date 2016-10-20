@@ -11,6 +11,12 @@ use clever_systems\mmm_runtime\Environment\Freistilbox;
 use clever_systems\mmm_runtime\Environment\Platform;
 use clever_systems\mmm_runtime\Environment\Uberspace;
 
+/**
+ * Class Runtime
+ * @package clever_systems\mmm_runtime
+ *
+ * Usage: @see \clever_systems\mmm\Compiler
+ */
 class Runtime {
   static $environment;
 
