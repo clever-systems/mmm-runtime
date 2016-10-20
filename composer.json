@@ -1,0 +1,15 @@
+{
+    "name": "clever-systems/mmm-runtime",
+    "description": "MachbarMacher Site Management: Runtime",
+    "authors": [
+        {
+            "name": "Axel Rutz",
+            "email": "axel.rutz@clever-systems.net"
+        }
+    ],
+    "require": {
+    },
+    "autoload": {
+        "psr-4": { "clever_systems\\mmm_runtime\\": ["src/"] }
+    }
+}
