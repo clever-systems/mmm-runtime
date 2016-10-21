@@ -26,7 +26,7 @@ class Runtime {
    */
   public static function getEnvironment() {
     if (!static::$environment) {
-      static::$environment = Freistilbox::get() || Uberspace::get() || Platform::get();
+      static::$environment = Freistilbox::get() ?: Uberspace::get() ?: Platform::get();
       if (!static::$environment) {
         throw new \Exception('I don\'t know this environment.');
       }
