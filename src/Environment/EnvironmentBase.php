@@ -107,7 +107,7 @@ abstract class EnvironmentBase implements EnvironmentInterface {
    * @return string
    */
   protected function realpath($path) {
-    $path = preg_replace('/^/?~/u', $this->fetchHomePath(), $path);
+    $path = preg_replace('#^/?~#u', $this->fetchHomePath(), $path);
     return realpath($path);
   }
 
