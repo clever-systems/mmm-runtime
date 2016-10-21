@@ -30,13 +30,11 @@ class autoDb {
     $databases['default']['default'] = array_filter($databases['default']['default']);
 
     $databases['default']['default'] += array (
-      'default' => array (
-        'database' => $db_name,
-        'driver' => 'mysql',
-        'host' => 'localhost',
-        'username' => 'renner',
-        'prefix' => '',
-      ),
+      'database' => $db_name,
+      'driver' => 'mysql',
+      'host' => 'localhost',
+      'username' => 'renner',
+      'prefix' => '',
     );
   }
 }
