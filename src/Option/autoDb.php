@@ -17,7 +17,7 @@ class autoDb {
 
     $placeholders = [
       '{user}' => Runtime::getEnvironment()->getUser(),
-      '{dir}' => dirname(dirname(getcwd())),
+      '{dir}' => basename(dirname(getcwd())),
       '{site}' => Runtime::getEnvironment()->getSite(),
     ];
     $db_name = strtr($pattern, $placeholders);
