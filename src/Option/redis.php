@@ -10,7 +10,7 @@ namespace clever_systems\mmm_runtime\Option;
  * @package clever_systems\mmm_runtime\Option
  */
 class redis {
-  function settings() {
+  public static function settings() {
     global $conf;
 
     $conf['redis_client_interface'] = 'PhpRedis';

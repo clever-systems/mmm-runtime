@@ -12,7 +12,7 @@ use clever_systems\mmm_runtime\Runtime;
  * @package clever_systems\mmm_runtime\Option
  */
 class autoDb {
-  function settings($pattern = '{user}_{dir}_{site}') {
+  public static function settings($pattern = '{user}_{dir}_{site}') {
     global $databases;
 
     $placeholders = [

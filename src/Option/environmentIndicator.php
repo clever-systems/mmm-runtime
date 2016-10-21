@@ -12,7 +12,7 @@ use clever_systems\mmm_runtime\Runtime;
  * @package clever_systems\mmm_runtime\Option
  */
 class autoDb {
-  function settings() {
+  public static function settings() {
     global $conf;
 
     // @todo Use fullname instead
