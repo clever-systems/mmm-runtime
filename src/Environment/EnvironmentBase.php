@@ -73,19 +73,28 @@ abstract class EnvironmentBase implements EnvironmentInterface {
    * @param string $pattern
    * @return bool
    */
-  protected function match($pattern) {
-    $pattern_parts = parse_url($pattern);
-    if (
-      isset($pattern_parts['path'])
-      // Adjust path,
-      && $pattern_parts['path'] = $this->realpath($pattern_parts['path'])
-        // and quit if it does not exist.
-        && $pattern_parts['path'] === FALSE
-    ) {
+  public function match($pattern) {
+    $pattern_parts = $this->normalizePatternParts($pattern);
+    // Quit if path does not exist.
+    if ($pattern_parts['path'] === FALSE) {
       return FALSE;
     }
     $relevant_environment_parts = array_intersect_key($this->getParts(), $pattern_parts);
     return $pattern_parts = $relevant_environment_parts;
+  }
+
+  /**
+   * @param $pattern
+   * @return mixed
+   */
+  public function normalizePatternParts($pattern) {
+    $pattern_parts = parse_url($pattern);
+    // Adjust path,
+    if (isset($pattern_parts['path'])) {
+      $pattern_parts['path'] = $this->realpath($pattern_parts['path']);
+      return $pattern_parts;
+    }
+    return $pattern_parts;
   }
 
   /**
