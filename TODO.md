@@ -5,3 +5,4 @@ MMM runtime TODO
 * Add drush policy file
 * Add command: mmm-content-pull
 * Add command: mmm-deploy
+* Add a composer fake-global generator
