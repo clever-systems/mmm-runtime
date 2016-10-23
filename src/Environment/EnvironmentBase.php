@@ -88,7 +88,8 @@ abstract class EnvironmentBase implements EnvironmentInterface {
    * @return mixed
    */
   public function normalizePatternParts($pattern) {
-    $pattern_parts = parse_url($pattern);
+    $pattern_parts = parse_url("dummy://$pattern");
+    unset($pattern_parts['scheme']);
     // Adjust path,
     if (isset($pattern_parts['path'])) {
       $pattern_parts['path'] = $this->realpath($pattern_parts['path']);
