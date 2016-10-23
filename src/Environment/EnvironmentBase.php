@@ -80,7 +80,8 @@ abstract class EnvironmentBase implements EnvironmentInterface {
       return FALSE;
     }
     $relevant_environment_parts = array_intersect_key($this->getParts(), $pattern_parts);
-    return $pattern_parts = $relevant_environment_parts;
+    $matching = $pattern_parts == $relevant_environment_parts;
+    return $matching;
   }
 
   /**
