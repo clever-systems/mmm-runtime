@@ -100,7 +100,7 @@ abstract class EnvironmentBase implements EnvironmentInterface {
   /**
    * @return array
    */
-  protected function getParts() {
+  public function getParts() {
     return [
       'user' => $this->user,
       'host' => $this->host,
@@ -127,7 +127,7 @@ abstract class EnvironmentBase implements EnvironmentInterface {
    * Copied from drush_server_home().
    */
   protected function fetchHomePath() {
-    // Cannot use $_SERVER superglobal since that's empty during UnitUnishTestCase
+    // Cannot use $_SERVER superglobal since that's empty during (what?)
     // getenv('HOME') isn't set on Windows and generates a Notice.
     $home = getenv('HOME');
     if (!empty($home)) {
@@ -144,11 +144,9 @@ abstract class EnvironmentBase implements EnvironmentInterface {
     return empty($home) ? NULL : $home;
   }
 
-  /**
-   * @return string
-   */
   protected function fetchUser() {
-    return get_current_user();
+    // get_current_user() is 'root' e.g. on freistilbox shell.
+    return getenv('USER');
   }
 
   /**

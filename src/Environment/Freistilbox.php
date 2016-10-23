@@ -17,11 +17,6 @@ class Freistilbox extends EnvironmentBase implements EnvironmentInterface {
     return 'freistilbox';
   }
 
-  protected function fetchUser() {
-    // get_current_user() is 'root' on the shell.
-    return $_SERVER['USER'];
-  }
-
   public function settings() {
     parent::settings();
     global $conf, $databases;
