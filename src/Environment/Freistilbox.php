@@ -22,9 +22,6 @@ class Freistilbox extends EnvironmentBase implements EnvironmentInterface {
     return $_SERVER['USER'];
   }
 
-  public function setConfDefaults(&$conf) {
-  }
-
   public function settings() {
     parent::settings();
     global $conf, $databases;
