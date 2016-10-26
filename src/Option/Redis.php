@@ -4,6 +4,7 @@
  */
 
 namespace clever_systems\mmm_runtime\Option;
+use clever_systems\mmm_runtime\Runtime;
 
 /**
  * Class redis
@@ -19,5 +20,7 @@ class Redis {
       $conf['cache_backends'][]       = 'sites/all/modules/redis/redis.autoload.inc';
       $conf['cache_default_class']    = 'Redis_Cache';
     }
+
+    $conf['cache_prefix']['default'] = Runtime::getEnvironment()->getLocalSiteId();
   }
 }
