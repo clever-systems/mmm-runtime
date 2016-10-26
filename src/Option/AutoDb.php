@@ -1,6 +1,6 @@
 <?php
 /**
- * @file autoDb.php
+ * @file AutoDb.php
  */
 
 namespace clever_systems\mmm_runtime\Option;
@@ -11,7 +11,7 @@ use clever_systems\mmm_runtime\Runtime;
  * Class autoDb
  * @package clever_systems\mmm_runtime\Option
  */
-class autoDb {
+class AutoDb {
   public static function settings($pattern = '{user}_{dir}_{site}') {
     global $databases;
 

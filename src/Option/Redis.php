@@ -1,6 +1,6 @@
 <?php
 /**
- * @file autoDb.php
+ * @file Redis.php
  */
 
 namespace clever_systems\mmm_runtime\Option;
@@ -9,7 +9,7 @@ namespace clever_systems\mmm_runtime\Option;
  * Class redis
  * @package clever_systems\mmm_runtime\Option
  */
-class redis {
+class Redis {
   public static function settings() {
     global $conf;
 

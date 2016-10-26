@@ -1,6 +1,6 @@
 <?php
 /**
- * @file autoDb.php
+ * @file EnvironmentIndicator.php
  */
 
 namespace clever_systems\mmm_runtime\Option;
@@ -11,7 +11,7 @@ use clever_systems\mmm_runtime\Runtime;
  * Class autoDb
  * @package clever_systems\mmm_runtime\Option
  */
-class autoDb {
+class EnvironmentIndicator {
   public static function settings() {
     global $conf;
 
