@@ -25,7 +25,10 @@ class Freistilbox extends EnvironmentBase implements EnvironmentInterface {
     $conf['file_temporary_path'] = "../tmp/$this->site";
 
     require '../config/drupal/settings-d7-site.php';
-    if (file_exists('../config/drupal/settings-d7-redis7.php')) {
+    if (
+      ($redis_options = glob('../config/drupal/settings-d7-redis*.php'))
+      && count($redis_options)== 1
+    ) {
       include '../config/drupal/settings-d7-redis7.php';
     }
 
