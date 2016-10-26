@@ -29,7 +29,7 @@ class Freistilbox extends EnvironmentBase implements EnvironmentInterface {
       ($redis_options = glob('../config/drupal/settings-d7-redis*.php'))
       && count($redis_options)== 1
     ) {
-      include '../config/drupal/settings-d7-redis7.php';
+      include $redis_options[0];
     }
 
     if (
