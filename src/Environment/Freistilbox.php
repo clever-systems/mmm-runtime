@@ -22,7 +22,13 @@ class Freistilbox extends EnvironmentBase implements EnvironmentInterface {
     global $conf, $databases;
 
     $conf['file_private_path'] = "../private/$this->site";
+    if (is_dir("../private") && !is_dir("../private/$this->site")) {
+      mkdir("../private/$this->site");
+    }
     $conf['file_temporary_path'] = "../tmp/$this->site";
+    if (is_dir("../tmp") && !is_dir("../tmp/$this->site")) {
+      mkdir("../tmp/$this->site");
+    }
 
     require '../config/drupal/settings-d7-site.php';
     if (
