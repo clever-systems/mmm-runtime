@@ -33,7 +33,7 @@ class AutoDb {
       'database' => $db_name,
       'driver' => 'mysql',
       'host' => 'localhost',
-      'username' => 'renner',
+      'username' => Runtime::getEnvironment()->getUser(),
       'prefix' => '',
     );
   }
