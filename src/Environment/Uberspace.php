@@ -21,10 +21,12 @@ class Uberspace extends EnvironmentBase implements EnvironmentInterface {
     parent::settings();
     global $conf, $databases;
 
-    // Get DB password, suppress warnings.
-    $my_cnf = parse_ini_file(getenv('HOME') . '/.my.cnf', TRUE, INI_SCANNER_RAW);
+    // Get DB password, but remove comments first.
+    $ini_file = getenv('HOME') . '/.my.cnf';
+    $ini_string = file_get_contents($ini_file);
+    $ini_string_without_comments = preg_replace('/ *#.*$/mu', '', $ini_string);
+    $my_cnf = parse_ini_string($ini_string_without_comments, TRUE, INI_SCANNER_RAW);
     $password = $my_cnf['client']['password'];
-    $password = preg_replace('/ *#.*$/', '', $password);
     $databases['default']['default']['password'] = $password;
   }
 }
