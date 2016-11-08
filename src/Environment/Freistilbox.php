@@ -18,8 +18,11 @@ class Freistilbox extends EnvironmentBase implements EnvironmentInterface {
   }
 
   protected function fetchUser() {
-    // getenv('USER') is empty e.g. on freistilbox cron shell.
-    $user = getenv('LOGNAME');
+    $user = parent::fetchUser();
+    if (!$user) {
+      // getenv('USER') is empty on cron shell, but this is not set from server.
+      $user = getenv('LOGNAME');
+    }
     return $user;
   }
 
