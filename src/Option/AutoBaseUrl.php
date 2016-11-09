@@ -12,7 +12,7 @@ use clever_systems\mmm_runtime\Runtime;
  * @package clever_systems\mmm_runtime\Option
  */
 class AutoBaseUrl {
-  public static function settings($pattern = 'www.{site}.{dir}.{user}.{host}') {
+  public static function settings($pattern = 'http://www.{site}.{dir}.{user}.{host}') {
     global $base_url;
 
     $placeholders = [
