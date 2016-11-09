@@ -170,7 +170,7 @@ abstract class EnvironmentBase implements EnvironmentInterface {
     }
     else {
       // D8
-      $conf_path = \Drupal\Core\DrupalKernel ::findSitePath(\Symfony\Component\HttpFoundation\Request ::createFromGlobals());
+      $conf_path = \Drupal\Core\DrupalKernel::findSitePath(\Symfony\Component\HttpFoundation\Request ::createFromGlobals());
     }
     $site = basename($conf_path);
     return $site;
