@@ -14,13 +14,6 @@ class Platform extends EnvironmentBase implements EnvironmentInterface {
     return 'platform';
   }
 
-  protected function fetchPath() {
-    $path = parent::fetchPath();
-    // We don't want another path at every release.
-    $path = preg_replace('#/\.deploy/releases/[0-9a-f]+/#', '/.deploy/current/', $path);
-    return $path;
-  }
-
   /**
    * @file Platform.php
    */

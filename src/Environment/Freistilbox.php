@@ -26,6 +26,13 @@ class Freistilbox extends EnvironmentBase implements EnvironmentInterface {
     return $user;
   }
 
+  protected function fetchPath() {
+    $path = parent::fetchPath();
+    // We don't want another path at every release.
+    $path = preg_replace('#/\.deploy/releases/[0-9a-f]+/#', '/.deploy/current/', $path);
+    return $path;
+  }
+
   public function settings() {
     parent::settings();
     global $conf, $databases;
