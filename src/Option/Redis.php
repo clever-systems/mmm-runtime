@@ -14,7 +14,7 @@ class Redis {
   public static function settings() {
     global $conf;
 
-    if (!empty($conf['redis_client_host'])) {
+    if (!empty($conf['redis_client_host']) || !empty($conf['redis_client_socket'])) {
       $conf['lock_inc']               = 'sites/all/modules/redis/redis.lock.inc';
       $conf['path_inc']               = 'sites/all/modules/redis/redis.path.inc';
       $conf['cache_backends'][]       = 'sites/all/modules/redis/redis.autoload.inc';
