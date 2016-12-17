@@ -1,6 +1,7 @@
 {
     "name": "clever-systems/mmm-runtime",
     "description": "MachbarMacher Site Management: Runtime",
+    "type": "drupal-drush",
     "authors": [
         {
             "name": "Axel Rutz",
