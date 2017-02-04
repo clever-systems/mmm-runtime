@@ -13,7 +13,7 @@ class Uberspace extends EnvironmentBase implements EnvironmentInterface {
   /**
    * @return string
    */
-  protected function fetchHost() {
+  protected function fetchShortHostName() {
     return 'uberspace';
   }
 
@@ -21,12 +21,23 @@ class Uberspace extends EnvironmentBase implements EnvironmentInterface {
     parent::settings();
     global $conf, $databases;
 
-    // Get DB password, but remove comments first.
-    $ini_file = getenv('HOME') . '/.my.cnf';
-    $ini_string = file_get_contents($ini_file);
-    $ini_string_without_comments = preg_replace('/ *#.*$/mu', '', $ini_string);
-    $my_cnf = parse_ini_string($ini_string_without_comments, TRUE, INI_SCANNER_RAW);
-    $password = $my_cnf['client']['password'];
-    $databases['default']['default']['password'] = $password;
+    if (empty($databases['default']['default']['password'])) {
+      // Get DB password, but remove comments first.
+      $ini_file = getenv('HOME') . '/.my.cnf';
+      $ini_string = file_get_contents($ini_file);
+      $ini_string_without_comments = preg_replace('/ *#.*$/mu', '', $ini_string);
+      $my_cnf = parse_ini_string($ini_string_without_comments, TRUE, INI_SCANNER_RAW);
+      $password = $my_cnf['client']['password'];
+      $databases['default']['default']['password'] = $password;
+    }
+    // Add defaults
+    if (isset($databases['default']['default'])) {
+      $databases['default']['default'] += [
+        'driver' => 'mysql',
+        'user' => $this->getUser(),
+        'host' => 'localhost',
+        'port' => 3306,
+      ];
+    }
   }
 }

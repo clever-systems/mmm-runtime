@@ -10,7 +10,7 @@ class Platform extends EnvironmentBase implements EnvironmentInterface {
   /**
    * @return string
    */
-  protected function fetchHost() {
+  protected function fetchShortHostName() {
     return 'platform';
   }
 

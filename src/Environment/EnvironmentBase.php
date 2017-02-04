@@ -16,7 +16,7 @@ abstract class EnvironmentBase implements EnvironmentInterface {
   /** @var string */
   protected $user;
   /** @var string */
-  protected $host;
+  protected $short_host_name;
   /** @var string */
   protected $site;
   /** @var string */
@@ -49,14 +49,23 @@ abstract class EnvironmentBase implements EnvironmentInterface {
    */
   public function __construct() {
     $this->user = $this->fetchUser();
-    $this->host = $this->fetchHost();
+    $this->short_host_name = $this->fetchShortHostName();
     $this->path = $this->fetchPath();
     $this->site = $this->fetchSite();
   }
 
   public function getLocalSiteId() {
-    return "$this->user@$this->host$this->path#$this->site";
+    $local_host_id = $this->getLocalHostId();
+    return "$local_host_id$this->path#$this->site";
   }
+
+  /**
+   * @return string
+   */
+  public function getLocalHostId() {
+    return "$this->user@$this->short_host_name";
+  }
+
 
   public function select($items) {
     foreach ($items as $pattern => $item) {
@@ -70,6 +79,7 @@ abstract class EnvironmentBase implements EnvironmentInterface {
   /**
    * Match a pattern against current environment.
    *
+   * @deprecated Not used anymore in mmm-builder.
    * @param string $pattern
    * @return bool
    */
@@ -105,7 +115,7 @@ abstract class EnvironmentBase implements EnvironmentInterface {
   public function getParts() {
     return [
       'user' => $this->user,
-      'host' => $this->host,
+      'host' => $this->short_host_name,
       'path' => $this->path,
       'fragment' => $this->site,
     ];
@@ -179,7 +189,7 @@ abstract class EnvironmentBase implements EnvironmentInterface {
   /**
    * @return string
    */
-  abstract protected function fetchHost();
+  abstract protected function fetchShortHostName();
 
   public function settings() {
     global $conf;
@@ -204,8 +214,8 @@ abstract class EnvironmentBase implements EnvironmentInterface {
   /**
    * @return string
    */
-  public function getHost() {
-    return $this->host;
+  public function getShortHostName() {
+    return $this->short_host_name;
   }
 
   /**

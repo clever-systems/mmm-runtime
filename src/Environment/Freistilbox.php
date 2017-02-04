@@ -13,7 +13,7 @@ class Freistilbox extends EnvironmentBase implements EnvironmentInterface {
   /**
    * @return string
    */
-  protected function fetchHost() {
+  protected function fetchShortHostName() {
     return 'freistilbox';
   }
 

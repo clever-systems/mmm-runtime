@@ -18,6 +18,8 @@ interface EnvironmentInterface {
 
   public function getLocalSiteId();
 
+  public function getLocalHostId();
+
   public function select($items);
 
   public function settings();
@@ -26,7 +28,7 @@ interface EnvironmentInterface {
 
   public function getUser();
 
-  public function getHost();
+  public function getShortHostName();
 
   public function getPath();
 }
