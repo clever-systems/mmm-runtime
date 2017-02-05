@@ -57,7 +57,8 @@ class Freistilbox extends EnvironmentBase implements EnvironmentInterface {
 
     require '../config/drupal/settings-d7-site.php';
     if (
-      ($redis_options = glob('../config/drupal/settings-d7-redis*.php'))
+      class_exists('Redis_Cache')
+      && ($redis_options = glob('../config/drupal/settings-d7-redis*.php'))
       && count($redis_options)== 1
     ) {
       include $redis_options[0];
