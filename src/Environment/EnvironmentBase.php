@@ -45,7 +45,6 @@ abstract class EnvironmentBase implements EnvironmentInterface {
 
   /**
    * Freistilbox constructor.
-   * @param string $site
    */
   public function __construct() {
     $this->user = $this->fetchUser();
@@ -54,22 +53,43 @@ abstract class EnvironmentBase implements EnvironmentInterface {
     $this->site = $this->fetchSite();
   }
 
-  public function getLocalSiteId() {
-    $local_host_id = $this->getLocalHostId();
-    return "$local_host_id$this->path#$this->site";
+  /**
+   * @return string
+   */
+  public function getHostUrn() {
+    return "$this->user@$this->short_host_name";
   }
 
   /**
    * @return string
    */
+  public function getSiteUrn() {
+    $local_host_id = $this->getLocalHostId();
+    return "$local_host_id$this->path#$this->site";
+  }
+
+  /**
+   * @deprecated Use getHostUrn()
+   *
+   * @return string
+   */
+  public function getLocalSiteId() {
+    return $this->getSiteUrn();
+  }
+
+  /**
+   * @deprecated Use getHostUrn()
+   *
+   * @return string
+   */
   public function getLocalHostId() {
-    return "$this->user@$this->short_host_name";
+    return $this->getHostUrn();
   }
 
 
-  public function select($items) {
-    foreach ($items as $pattern => $item) {
-      if ($this->match($pattern)) {
+  public function select($site_urn_items) {
+    foreach ($site_urn_items as $site_urn => $item) {
+      if ($this->match($site_urn)) {
         return $item;
       }
     }
@@ -79,34 +99,35 @@ abstract class EnvironmentBase implements EnvironmentInterface {
   /**
    * Match a pattern against current environment.
    *
-   * Pattern path is made to realpath to compare.
-   *
-   * @param string $pattern
+   * @param string $site_urn
    * @return bool
    */
-  public function match($pattern) {
-    $pattern_parts = $this->normalizePatternParts($this->getPatternParts($pattern));
-    $parts = $this->normalizePatternParts($this->getParts());
-    $relevant_environment_parts = array_intersect_key($parts, $pattern_parts);
-    $matching = $pattern_parts == $relevant_environment_parts;
+  public function match($site_urn) {
+    $site_urn_parts = $this->normalizePathInSiteUrnParts($this->parseSiteUrnParts($site_urn));
+    $current_site_urn_parts = $this->normalizePathInSiteUrnParts($this->getSiteUrnParts());
+    $relevant_site_urn_parts = array_intersect_key($current_site_urn_parts, $site_urn_parts);
+    $matching = $site_urn_parts == $relevant_site_urn_parts;
     return $matching;
   }
 
   /**
-   * @param $pattern
-   * @return mixed
+   * @internal Public only for debugging.
+   * @param string $pattern
+   * @return string[]
    */
-  public function getPatternParts($pattern) {
+  public function parseSiteUrnParts($pattern) {
+    // parse_url needs schema, so add and remove a dummy.
     $pattern_parts = parse_url("dummy://$pattern");
     unset($pattern_parts['scheme']);
     return $pattern_parts;
   }
 
   /**
-   * @param $pattern_parts
-   * @return mixed
+   * @internal Public only for debugging.
+   * @param string[] $pattern_parts
+   * @return string[]
    */
-  public function normalizePatternParts($pattern_parts) {
+  public function normalizePathInSiteUrnParts($pattern_parts) {
     // Adjust path,
     if (isset($pattern_parts['path'])) {
       $pattern_parts['path'] = realpath($pattern_parts['path']);
@@ -117,9 +138,10 @@ abstract class EnvironmentBase implements EnvironmentInterface {
   }
 
   /**
-   * @return array
+   * @internal Public only for debugging.
+   * @return string[]
    */
-  public function getParts() {
+  public function getSiteUrnParts() {
     return [
       'user' => $this->user,
       'host' => $this->short_host_name,
@@ -131,7 +153,7 @@ abstract class EnvironmentBase implements EnvironmentInterface {
   /**
    * Get real path, replcing ~.
    *
-   * @param $path
+   * @param string $path
    * @return string
    */
   protected function normalizePath($path) {
@@ -142,6 +164,8 @@ abstract class EnvironmentBase implements EnvironmentInterface {
    * Return the user's home directory.
    *
    * Copied from drush_server_home().
+   *
+   * @return string
    */
   protected function fetchHomePath() {
     // Cannot use $_SERVER superglobal since that's empty during (what?)
@@ -161,6 +185,9 @@ abstract class EnvironmentBase implements EnvironmentInterface {
     return empty($home) ? NULL : $home;
   }
 
+  /**
+   * @return string
+   */
   protected function fetchUser() {
     // get_current_user() is 'root' e.g. on freistilbox shell.
     return getenv('USER');
