@@ -10,15 +10,8 @@ use clever_systems\mmm_runtime\Runtime;
  * Alter alias record data in code.
  */
 function mmm_runtime_drush_sitealias_alter(&$alias_record) {
-  // Hackily guess some autoloader paths.
-  $paths = [
-    __DIR__ . '/vendor/autoload.php',
-    DRUPAL_ROOT . '/../vendor/autoload.php'
-  ];
-  foreach ($paths as $path) {
-    if (is_file($path)) {
-      include $path;
-    }
+  if (defined('DRUPAL_ROOT')) {
+    @include DRUPAL_ROOT . '/../vendor/autoload.php';
   }
 
   $environment = Runtime::getEnvironment();
