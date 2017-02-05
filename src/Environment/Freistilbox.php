@@ -42,6 +42,13 @@ class Freistilbox extends EnvironmentBase implements EnvironmentInterface {
     return $path;
   }
 
+  protected function normalizePath($path) {
+    // Ignore cluster id.
+    $path = preg_replace('~^/srv/www/freistilbox/clients/c[0-9]+/~',
+      '/srv/www/freistilbox/clients/c*/', $path);
+    return $path;
+  }
+
   public function settings() {
     parent::settings();
     global $conf, $databases;

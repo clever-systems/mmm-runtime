@@ -86,11 +86,8 @@ abstract class EnvironmentBase implements EnvironmentInterface {
    */
   public function match($pattern) {
     $pattern_parts = $this->normalizePatternParts($pattern);
-    // Quit if path does not exist.
-    if (isset($pattern_parts['path']) && $pattern_parts['path'] === FALSE) {
-      return FALSE;
-    }
-    $relevant_environment_parts = array_intersect_key($this->getParts(), $pattern_parts);
+    $parts = $this->normalizePatternParts($this->getParts());
+    $relevant_environment_parts = array_intersect_key($parts, $pattern_parts);
     $matching = $pattern_parts == $relevant_environment_parts;
     return $matching;
   }
@@ -113,7 +110,8 @@ abstract class EnvironmentBase implements EnvironmentInterface {
     $pattern_parts = $this->getPatternParts($pattern);
     // Adjust path,
     if (isset($pattern_parts['path'])) {
-      $pattern_parts['path'] = $this->realpath($pattern_parts['path']);
+      $pattern_parts['path'] = realpath($pattern_parts['path']);
+      $pattern_parts['path'] = $this->normalizePath($pattern_parts['path']);
       return $pattern_parts;
     }
     return $pattern_parts;
@@ -137,10 +135,8 @@ abstract class EnvironmentBase implements EnvironmentInterface {
    * @param $path
    * @return string
    */
-  protected function realpath($path) {
-    // Prepend homepath to relative paths or tilde.
-    $path = preg_replace('#^((?!/)|/?~)#u', $this->fetchHomePath(), $path);
-    return realpath($path);
+  protected function normalizePath($path) {
+    return $path;
   }
 
   /**
