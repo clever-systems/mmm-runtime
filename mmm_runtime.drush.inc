@@ -16,13 +16,13 @@ function mmm_runtime_drush_sitealias_alter(&$alias_record) {
 
   $environment = Runtime::getEnvironment();
   if (
-       isset($alias_record['host'])
-    && isset($alias_record['user'])
+       isset($alias_record['remote-host'])
+    && isset($alias_record['remote-user'])
     && isset($alias_record['#mmm-local-host-id'])
     && $alias_record['#mmm-local-host-id'] === $environment->getLocalHostId()
   ) {
-    unset($alias_record['host']);
-    unset($alias_record['user']);
+    unset($alias_record['remote-host']);
+    unset($alias_record['remote-user']);
     $alias_record['#mmm-runtime-local'] = TRUE;
   }
 }
