@@ -29,7 +29,11 @@ class Freistilbox extends EnvironmentBase implements EnvironmentInterface {
   protected function fetchPath() {
     $path = parent::fetchPath();
     // We don't want another path at every release.
-    $path = preg_replace('#/\.deploy/releases/[0-9a-f]+/#', '/current/', $path);
+    // Also the cluster server is irrelevant.
+    $path = preg_replace(
+      '#^/srv/www/freistilbox/clients/c[0-9]+/(s[0-9]+)/\.deploy/releases/[0-9a-f]+/#',
+      '/srv/www/freistilbox/home/\1/current/',
+      $path);
     return $path;
   }
 
