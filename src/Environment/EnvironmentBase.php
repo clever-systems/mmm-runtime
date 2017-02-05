@@ -79,7 +79,8 @@ abstract class EnvironmentBase implements EnvironmentInterface {
   /**
    * Match a pattern against current environment.
    *
-   * @deprecated Not used anymore in mmm-builder.
+   * Pattern path is made to realpath to compare.
+   *
    * @param string $pattern
    * @return bool
    */
@@ -98,9 +99,18 @@ abstract class EnvironmentBase implements EnvironmentInterface {
    * @param $pattern
    * @return mixed
    */
-  public function normalizePatternParts($pattern) {
+  public function getPatternParts($pattern) {
     $pattern_parts = parse_url("dummy://$pattern");
     unset($pattern_parts['scheme']);
+    return $pattern_parts;
+  }
+
+  /**
+   * @param $pattern
+   * @return mixed
+   */
+  public function normalizePatternParts($pattern) {
+    $pattern_parts = $this->getPatternParts($pattern);
     // Adjust path,
     if (isset($pattern_parts['path'])) {
       $pattern_parts['path'] = $this->realpath($pattern_parts['path']);
