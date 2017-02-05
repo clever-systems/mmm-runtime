@@ -130,7 +130,6 @@ abstract class EnvironmentBase implements EnvironmentInterface {
   public function normalizePathInSiteUrnParts($pattern_parts) {
     // Adjust path,
     if (isset($pattern_parts['path'])) {
-      $pattern_parts['path'] = realpath($pattern_parts['path']);
       $pattern_parts['path'] = $this->normalizePath($pattern_parts['path']);
       return $pattern_parts;
     }
@@ -157,7 +156,7 @@ abstract class EnvironmentBase implements EnvironmentInterface {
    * @return string
    */
   protected function normalizePath($path) {
-    return $path;
+    return realpath($path);
   }
 
   /**

@@ -26,27 +26,12 @@ class Freistilbox extends EnvironmentBase implements EnvironmentInterface {
     return $user;
   }
 
-  protected function fetchPath() {
-    $path = parent::fetchPath();
-    /*
-     * Looks like we don not need this as EnvironmentBase::match
-     * realpaths the matched path.
-     *
-    // We don't want another path at every release.
-    // Also the cluster server is irrelevant.
-    $path = preg_replace(
-      '#^/srv/www/freistilbox/clients/c[0-9]+/(s[0-9]+)/\.deploy/releases/[0-9a-f]+/#',
-      '/srv/www/freistilbox/home/\1/current/',
-      $path);
-    */
-    return $path;
-  }
-
   protected function normalizePath($path) {
-    // Ignore cluster id.
-    $path = preg_replace('~^/srv/www/freistilbox/clients/c[0-9]+/~',
-      '/srv/www/freistilbox/clients/c*/', $path);
-    return $path;
+    // Only shell server has a home dir, emulate for others.
+    $path = preg_replace('~^/srv/www/freistilbox/home/(s[0-9]+)/current/~',
+      dirname(getcwd()) . '/', $path);
+    // Make it a real path in all cases.
+    return parent::normalizePath($path);
   }
 
   public function settings() {
