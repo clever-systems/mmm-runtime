@@ -31,12 +31,13 @@ class Uberspace extends EnvironmentBase implements EnvironmentInterface {
       $databases['default']['default']['password'] = $password;
     }
     // Add defaults
-    if (isset($databases['default']['default'])) {
+    if (isset($databases['default']['default']['database'])) {
       $databases['default']['default'] += [
         'driver' => 'mysql',
-        'user' => $this->getUser(),
+        'username' => $this->getUser(),
         'host' => 'localhost',
         'port' => 3306,
+        'prefix' => '',
       ];
     }
   }
