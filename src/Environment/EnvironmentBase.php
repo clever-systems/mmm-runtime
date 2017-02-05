@@ -85,7 +85,7 @@ abstract class EnvironmentBase implements EnvironmentInterface {
    * @return bool
    */
   public function match($pattern) {
-    $pattern_parts = $this->normalizePatternParts($pattern);
+    $pattern_parts = $this->normalizePatternParts($this->getPatternParts($pattern));
     $parts = $this->normalizePatternParts($this->getParts());
     $relevant_environment_parts = array_intersect_key($parts, $pattern_parts);
     $matching = $pattern_parts == $relevant_environment_parts;
@@ -103,11 +103,10 @@ abstract class EnvironmentBase implements EnvironmentInterface {
   }
 
   /**
-   * @param $pattern
+   * @param $pattern_parts
    * @return mixed
    */
-  public function normalizePatternParts($pattern) {
-    $pattern_parts = $this->getPatternParts($pattern);
+  public function normalizePatternParts($pattern_parts) {
     // Adjust path,
     if (isset($pattern_parts['path'])) {
       $pattern_parts['path'] = realpath($pattern_parts['path']);
