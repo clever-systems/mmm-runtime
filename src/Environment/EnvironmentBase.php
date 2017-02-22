@@ -21,6 +21,8 @@ abstract class EnvironmentBase implements EnvironmentInterface {
   protected $site;
   /** @var string */
   protected $path;
+  /** @var int */
+  protected $drupal_major_version;
 
   /**
    * Static constructor after check.
@@ -51,6 +53,9 @@ abstract class EnvironmentBase implements EnvironmentInterface {
     $this->short_host_name = $this->fetchShortHostName();
     $this->path = $this->fetchPath();
     $this->site = $this->fetchSite();
+
+    $this->drupal_major_version = file_exists(DRUPAL_ROOT . '/core/lib/Drupal.php')
+      ? 8 : 7;
   }
 
   /**
@@ -205,12 +210,10 @@ abstract class EnvironmentBase implements EnvironmentInterface {
    * @return string
    */
   protected function fetchSite() {
-    if (function_exists('conf_path')) {
-      // D7
+    if ($this->drupal_major_version == 7) {
       $conf_path = conf_path();
     }
     else {
-      // D8
       $conf_path = \Drupal\Core\DrupalKernel::findSitePath(\Symfony\Component\HttpFoundation\Request ::createFromGlobals());
     }
     $site = basename($conf_path);
@@ -226,13 +229,11 @@ abstract class EnvironmentBase implements EnvironmentInterface {
     global $conf;
     // Lock public file path against erroneous variable deploys.
     $conf['file_public_path'] = "sites/$this->site/files";
-    if (file_exists(DRUPAL_ROOT . '/core/lib/Drupal.php')) {
-      // D8
+    if ($this->drupal_major_version == 8) {
       global $config_directories;
       $config_directories[CONFIG_SYNC_DIRECTORY] = '../config-sync';
     }
     else {
-      // D7
     }
   }
 

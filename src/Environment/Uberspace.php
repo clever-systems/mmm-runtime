@@ -32,11 +32,12 @@ class Uberspace extends EnvironmentBase implements EnvironmentInterface {
     }
     // Add defaults
     if (isset($databases['default']['default']['database'])) {
+      $is_d8 = $this->drupal_major_version == '8';
       $databases['default']['default'] += [
         'driver' => 'mysql',
         'username' => $this->getUser(),
-        'host' => 'localhost',
-        'port' => 3306,
+        'host' => $is_d8 ? '127.0.0.1' : 'localhost',
+        'port' => $is_d8 ? 3307 : 3306,
         'prefix' => '',
       ];
     }
