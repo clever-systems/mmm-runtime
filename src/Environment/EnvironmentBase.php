@@ -226,6 +226,14 @@ abstract class EnvironmentBase implements EnvironmentInterface {
     global $conf;
     // Lock public file path against erroneous variable deploys.
     $conf['file_public_path'] = "sites/$this->site/files";
+    if (file_exists(DRUPAL_ROOT . '/core/lib/Drupal.php')) {
+      // D8
+      global $config_directories;
+      $config_directories[CONFIG_SYNC_DIRECTORY] = '../config-sync';
+    }
+    else {
+      // D7
+    }
   }
 
   /**
