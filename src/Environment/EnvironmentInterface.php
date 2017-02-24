@@ -41,7 +41,7 @@ interface EnvironmentInterface {
   /**
    * @return void
    */
-  public function settings();
+  public function settings(&$settings, &$databases);
 
   /**
    * @return string

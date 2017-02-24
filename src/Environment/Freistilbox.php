@@ -34,24 +34,29 @@ class Freistilbox extends EnvironmentBase implements EnvironmentInterface {
     return parent::normalizePath($path);
   }
 
-  public function settings() {
-    parent::settings();
-    global $conf, $databases;
+  public function settings(&$settings, &$databases) {
+    parent::settings($settings, $databases);
 
-    $conf['file_private_path'] = "../private/$this->site";
+    $settings['file_private_path'] = "../private/$this->site";
     if (is_dir("../private") && !is_dir("../private/$this->site")) {
       mkdir("../private/$this->site");
     }
-    $conf['file_temporary_path'] = "../tmp/$this->site";
+    $settings['file_temporary_path'] = "../tmp/$this->site";
     if (is_dir("../tmp") && !is_dir("../tmp/$this->site")) {
       mkdir("../tmp/$this->site");
     }
 
-    require '../config/drupal/settings-d7-site.php';
+    $version = $this->drupal_major_version;
+    require "../config/drupal/settings-d$version-site.php";
+
+    // @fixme
+    // Get unique redis credentials.
+    $has_redis = ($version == 7) ? class_exists('\Redis_Cache')
+      : class_exists('\Drupal\redis\Cache\CacheBase');
     if (
-      class_exists('Redis_Cache')
-      && ($redis_options = glob('../config/drupal/settings-d7-redis*.php'))
-      && count($redis_options)== 1
+      $has_redis
+      && ($redis_options = glob("../config/drupal/settings-d$version-redis*.php"))
+      && count($redis_options) == 1
     ) {
       include $redis_options[0];
     }
@@ -61,11 +66,11 @@ class Freistilbox extends EnvironmentBase implements EnvironmentInterface {
       !empty($databases['default']['default']['database'])
       && ($database = $databases['default']['default']['database'])
     ) {
-      require_once "../config/drupal/settings-d7-$database.php";
+      require_once "../config/drupal/settings-d$version-$database.php";
     }
     elseif (
       // Unique database ID.
-      ($database_options = glob('../config/drupal/settings-d7-db*.php'))
+      ($database_options = glob("../config/drupal/settings-d$version-db*.php"))
       && count($database_options) == 1
     ) {
       require_once $database_options[0];

@@ -17,9 +17,8 @@ class Uberspace extends EnvironmentBase implements EnvironmentInterface {
     return 'uberspace';
   }
 
-  public function settings() {
-    parent::settings();
-    global $conf, $databases;
+  public function settings(&$settings, &$databases) {
+    parent::settings($settings, $databases);
 
     if (empty($databases['default']['default']['password'])) {
       // Get DB password, but remove comments first.
@@ -42,4 +41,5 @@ class Uberspace extends EnvironmentBase implements EnvironmentInterface {
       ];
     }
   }
+
 }

@@ -225,10 +225,27 @@ abstract class EnvironmentBase implements EnvironmentInterface {
    */
   abstract protected function fetchShortHostName();
 
-  public function settings() {
-    global $conf;
+  /**
+   * Adjust settings.
+   *
+   * For D7, @see \drupal_settings_initialize
+   *   Runtime::getEnvironment()->settings($conf, $databases);
+   *
+   * For D8, @see \Drupal\Core\Site\Settings::initialize
+   *   Runtime::getEnvironment()->settings($settings, $databases);
+   *
+   * Pass some vars by reference, as in D8 some are no longer globals.
+   *
+   * @param $settings
+   *   Note that in D7, $settings is called $conf.
+   * @param $databases
+   *   DB credentials, all versions.
+   */
+  public function settings(&$settings, &$databases) {
     // Lock public file path against erroneous variable deploys.
-    $conf['file_public_path'] = "sites/$this->site/files";
+    $settings['file_public_path'] = "sites/$this->site/files";
+
+    // Set standard config sync directory.
     if ($this->drupal_major_version == 8) {
       global $config_directories;
       $config_directories[CONFIG_SYNC_DIRECTORY] = '../config-sync';

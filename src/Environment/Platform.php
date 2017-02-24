@@ -17,17 +17,16 @@ class Platform extends EnvironmentBase implements EnvironmentInterface {
   /**
    * @file Platform.php
    */
-  public function settings() {
+  public function settings(&$settings, &$databases, &$config = NULL, &$config_directories = NULL) {
     parent::settings();
-    global $conf, $databases, $drupal_hash_salt;
 
     // Configure private and temporary file paths.
     if (isset($_ENV['PLATFORM_APP_DIR'])) {
-      if (!isset($conf['file_private_path'])) {
-        $conf['file_private_path'] = $_ENV['PLATFORM_APP_DIR'] . '/private';
+      if (!isset($settings['file_private_path'])) {
+        $settings['file_private_path'] = $_ENV['PLATFORM_APP_DIR'] . '/private';
       }
-      if (!isset($conf['file_temporary_path'])) {
-        $conf['file_temporary_path'] = $_ENV['PLATFORM_APP_DIR'] . '/tmp';
+      if (!isset($settings['file_temporary_path'])) {
+        $settings['file_temporary_path'] = $_ENV['PLATFORM_APP_DIR'] . '/tmp';
       }
     }
 
@@ -44,15 +43,10 @@ class Platform extends EnvironmentBase implements EnvironmentInterface {
             $GLOBALS[$name] = $value;
           }
           else {
-            $conf[$name] = $value;
+            $settings[$name] = $value;
           }
         }
       }
-    }
-
-    // Set a default Drupal hash salt, based on a project-specific entropy value.
-    if (isset($_ENV['PLATFORM_PROJECT_ENTROPY']) && empty($drupal_hash_salt)) {
-      $drupal_hash_salt = $_ENV['PLATFORM_PROJECT_ENTROPY'];
     }
 
     // Default PHP settings.
@@ -64,7 +58,7 @@ class Platform extends EnvironmentBase implements EnvironmentInterface {
     ini_set('pcre.recursion_limit', 200000);
 
     // Force Drupal not to check for HTTP connectivity until we fixed the self test.
-    $conf['drupal_http_request_fails'] = FALSE;
+    $settings['drupal_http_request_fails'] = FALSE;
 
     if (isset($_ENV['PLATFORM_RELATIONSHIPS'])) {
       $relationships = json_decode(base64_decode($_ENV['PLATFORM_RELATIONSHIPS']), TRUE);
@@ -72,10 +66,10 @@ class Platform extends EnvironmentBase implements EnvironmentInterface {
 
     if (!empty($relationships['redis'])) {
       $redis = $relationships['redis'][0];
-      $conf['redis_client_host']      = $redis['host'];
-      $conf['redis_client_port']      = $redis['port'];
+      $settings['redis_client_host']      = $redis['host'];
+      $settings['redis_client_port']      = $redis['port'];
       // Unique prefix:
-      $conf['cache_prefix']['default'] = $this->site;
+      $settings['cache_prefix']['default'] = $this->site;
     }
 
     if (
