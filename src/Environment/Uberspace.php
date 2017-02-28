@@ -19,10 +19,11 @@ class Uberspace extends EnvironmentBase implements EnvironmentInterface {
 
   public function settings(&$settings, &$databases) {
     parent::settings($settings, $databases);
+    $is_d8 = $this->drupal_major_version == '8';
 
     if (empty($databases['default']['default']['password'])) {
       // Get DB password, but remove comments first.
-      $ini_file = getenv('HOME') . '/.my.cnf';
+      $ini_file = getenv('HOME') . $is_d8 ? '/.my.mariadb.cnf' : '/.my.cnf';
       $ini_string = file_get_contents($ini_file);
       $ini_string_without_comments = preg_replace('/ *#.*$/mu', '', $ini_string);
       $my_cnf = parse_ini_string($ini_string_without_comments, TRUE, INI_SCANNER_RAW);
@@ -31,7 +32,6 @@ class Uberspace extends EnvironmentBase implements EnvironmentInterface {
     }
     // Add defaults
     if (isset($databases['default']['default']['database'])) {
-      $is_d8 = $this->drupal_major_version == '8';
       $databases['default']['default'] += [
         'driver' => 'mysql',
         'username' => $this->getUser(),
