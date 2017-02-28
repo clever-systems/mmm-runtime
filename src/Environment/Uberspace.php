@@ -23,7 +23,7 @@ class Uberspace extends EnvironmentBase implements EnvironmentInterface {
 
     if (empty($databases['default']['default']['password'])) {
       // Get DB password, but remove comments first.
-      $ini_file = getenv('HOME') . $is_d8 ? '/.my.mariadb.cnf' : '/.my.cnf';
+      $ini_file = getenv('HOME') . ($is_d8 ? '/.my.mariadb.cnf' : '/.my.cnf');
       $ini_string = file_get_contents($ini_file);
       $ini_string_without_comments = preg_replace('/ *#.*$/mu', '', $ini_string);
       $my_cnf = parse_ini_string($ini_string_without_comments, TRUE, INI_SCANNER_RAW);
