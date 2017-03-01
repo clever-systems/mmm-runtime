@@ -257,6 +257,8 @@ abstract class EnvironmentBase implements EnvironmentInterface {
   public function settings(&$settings, &$databases) {
     // Lock public file path against erroneous variable deploys.
     $settings['file_public_path'] = "sites/$this->site/files";
+    $settings['file_private_path'] = "../private/$this->site";
+    $settings['file_temporary_path'] = "../tmp/$this->site";
 
     // Set standard config sync directory.
     if ($this->drupal_major_version == 8) {
