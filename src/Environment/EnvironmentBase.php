@@ -73,6 +73,19 @@ abstract class EnvironmentBase implements EnvironmentInterface {
     return "$local_host_id$this->path#$this->site";
   }
 
+  protected function buildSiteUrn($parts) {
+    return "$parts[user]@$parts[host]$parts[path]#$parts[fragment]";
+  }
+
+  /**
+   * @return string
+   */
+  public function getNormalizedSiteUrn() {
+    $normalized_site_urn = $this->buildSiteUrn(
+      $this->normalizePathInSiteUrnParts($this->getSiteUrnParts()));
+    return $normalized_site_urn;
+  }
+
   /**
    * @deprecated Use getHostUrn()
    *
