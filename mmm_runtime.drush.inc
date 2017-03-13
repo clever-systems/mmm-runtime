@@ -13,6 +13,9 @@ function mmm_runtime_drush_sitealias_alter(&$alias_record) {
   if (defined('DRUPAL_ROOT')) {
     @include DRUPAL_ROOT . '/../vendor/autoload.php';
   }
+  if (!class_exists(Runtime::class)) {
+    return;
+  }
 
   $environment = Runtime::getEnvironment();
   $local_host_id = $environment->getLocalHostId();
