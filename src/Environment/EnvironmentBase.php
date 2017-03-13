@@ -58,13 +58,14 @@ namespace clever_systems\mmm_runtime\Environment {
      * Freistilbox constructor.
      */
     public function __construct() {
+      // Do it first, as $this->fetchsite() needs it.
+      $this->drupal_major_version = file_exists(DRUPAL_ROOT . '/core/lib/Drupal.php')
+        ? 8 : 7;
+
       $this->user = $this->fetchUser();
       $this->short_host_name = $this->fetchShortHostName();
       $this->path = $this->fetchPath();
       $this->site = $this->fetchSite();
-
-      $this->drupal_major_version = file_exists(DRUPAL_ROOT . '/core/lib/Drupal.php')
-        ? 8 : 7;
     }
 
     /**
