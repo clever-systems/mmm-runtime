@@ -3,15 +3,6 @@
  * @file EnvironmentBase.php
  */
 
-// Prevent errors in EnvironmentBase::fetchSite
-namespace {
-  if (!function_exists('drupal_valid_test_ua')) {
-    function drupal_valid_test_ua($new_prefix = NULL) {
-      return FALSE;
-    }
-  }
-}
-
 namespace clever_systems\mmm_runtime\Environment {
 
 
