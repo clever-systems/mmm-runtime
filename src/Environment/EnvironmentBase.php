@@ -30,7 +30,7 @@ namespace clever_systems\mmm_runtime\Environment {
     protected $site;
     /** @var string */
     protected $path;
-    /** @var int */
+    /** @var int|null */
     protected $drupal_major_version;
 
     /**
@@ -59,8 +59,10 @@ namespace clever_systems\mmm_runtime\Environment {
      */
     public function __construct() {
       // Do it first, as $this->fetchsite() needs it.
-      $this->drupal_major_version = file_exists(DRUPAL_ROOT . '/core/lib/Drupal.php')
-        ? 8 : 7;
+      if (defined('DRUPAL_ROOT')) {
+        $this->drupal_major_version = file_exists(DRUPAL_ROOT . '/core/lib/Drupal.php')
+          ? 8 : 7;
+      }
 
       $this->user = $this->fetchUser();
       $this->short_host_name = $this->fetchShortHostName();
@@ -233,13 +235,15 @@ namespace clever_systems\mmm_runtime\Environment {
      * @return string
      */
     protected function fetchSite() {
+      $site = '';
       if ($this->drupal_major_version == 7) {
         $conf_path = conf_path();
+        $site = basename($conf_path);
       }
-      else {
+      elseif ($this->drupal_major_version == 8) {
         $conf_path = \Drupal\Core\DrupalKernel::findSitePath(\Symfony\Component\HttpFoundation\Request::createFromGlobals());
+        $site = basename($conf_path);
       }
-      $site = basename($conf_path);
       return $site;
     }
 
