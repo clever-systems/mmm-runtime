@@ -262,18 +262,26 @@ namespace clever_systems\mmm_runtime\Environment {
     public function settings(&$settings, &$databases) {
       // Lock public file path against erroneous variable deploys.
       $settings['file_public_path'] = "sites/$this->site/files";
-      $settings['file_private_path'] = "../private/$this->site";
+      $private_path = "../private/$this->site";
+      if (!file_exists($private_path)) {
+        mkdir($private_path);
+      }
+      $settings['file_private_path'] = $private_path;
 
       // Set standard config sync directory.
+      $tmp_path = "../tmp/$this->site";
+      if (!file_exists($tmp_path)) {
+        mkdir($tmp_path);
+      }
       if ($this->drupal_major_version == 8) {
         global $config_directories;
         $config_directories[CONFIG_SYNC_DIRECTORY] = '../config-sync';
 
         global $config;
-        $config['system.file']['path']['temporary'] = "../tmp/$this->site";
+        $config['system.file']['path']['temporary'] = $tmp_path;
       }
       else {
-        $settings['file_temporary_path'] = "../tmp/$this->site";
+        $settings['file_temporary_path'] = $tmp_path;
       }
     }
 
