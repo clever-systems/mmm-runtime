@@ -282,6 +282,10 @@ namespace clever_systems\mmm_runtime\Environment {
       }
       else {
         $settings['file_temporary_path'] = $tmp_path;
+
+        $settings['environment_indicator_overwrite'] = TRUE;
+        $settings['environment_indicator_overwritten_name'] = $this->getHostUrn();
+        $settings['environment_indicator_overwritten_color'] = '#'.dechex(hexdec(substr(md5($conf['environment_indicator_overwritten_name']), 0, 6)) & 0x7f7f7f); // Only dark colors.
       }
     }
 
