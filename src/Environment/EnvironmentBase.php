@@ -288,6 +288,9 @@ namespace clever_systems\mmm_runtime\Environment {
         $settings['environment_indicator_overwritten_color'] = '#'.dechex(hexdec(substr(md5($settings['environment_indicator_overwritten_name']), 0, 6)) & 0x7f7f7f); // Only dark colors.
         $settings['environment_indicator_overwritten_text_color'] = '#ffffff';
       }
+
+      // Assumes possibly many installation per user. Override if else.
+      $settings['cache_prefix']['default'] = "$this->user:$this->path:$this->site";
     }
 
     /**
