@@ -1,6 +1,7 @@
 <?php
 
 namespace clever_systems\mmm_runtime\Environment;
+use clever_systems\mmm_runtime\Helper;
 
 /**
  * @file Freistilbox.php
@@ -37,10 +38,7 @@ class Freistilbox extends EnvironmentBase implements EnvironmentInterface {
   public function settings(&$settings, &$databases) {
     parent::settings($settings, $databases);
     $version = $this->drupal_major_version;
-    // D7 config snippets use $conf.
-    if ($version == 7) {
-      $conf =& $settings;
-    }
+    $settings_variable = ($version == 7) ? 'conf' : 'settings';
 
     $settings['file_private_path'] = "../private/$this->site";
     if (is_dir("../private") && !is_dir("../private/$this->site")) {
@@ -53,37 +51,25 @@ class Freistilbox extends EnvironmentBase implements EnvironmentInterface {
 
     require "../config/drupal/settings-d$version-site.php";
 
-    // @fixme
+    // REDIS:
     // Get unique redis credentials.
     // We can neither rely on module_exists here (it's too early) nor use
     // class_exists (as cache classes are included via $conf['cache_backends'])
     // nor check that setting (as this runs before user settings).
     // So we just always include the config snippet.
     // Also we don NOT want the snippet to set $settings['cache']['default']
-    // and $settings['cache_prefix']['default'] so we revert that.
+    // and $settings['cache_prefix']['default'] so we filter the include.
     if (
       ($redis_options = glob("../config/drupal/settings-d$version-redis*.php"))
       && count($redis_options) == 1
     ) {
-      $cache_default_backup = isset($settings['cache']['default']) ? $settings['cache']['default'] : NULL;
-      $cache_prefix_default_backup = isset($settings['cache_prefix']['default']) ? $settings['cache_prefix']['default'] : NULL;
-
-      include $redis_options[0];
-
-      if (isset($cache_default_backup)) {
-        $settings['cache']['default'] = $cache_default_backup;
-      }
-      else {
-        unset($settings['cache']['default']);
-      }
-      if (isset($cache_prefix_default_backup)) {
-        $settings['cache_prefix']['default'] = $cache_prefix_default_backup;
-      }
-      else {
-        unset($settings['cache_prefix']['default']);
-      }
+      $keys = ($version == 7) ?
+        ['redis_client_host', 'redis_client_port', 'redis_client_password'] :
+        ['redis.connection'];
+      $settings = Helper::filterInclude($redis_options[0], $settings_variable, $keys) + $settings;
     }
 
+    // DATABASE:
     if (
       // Explicit database ID.
       !empty($databases['default']['default']['database'])
