@@ -2,8 +2,6 @@
 
 namespace clever_systems\mmm_runtime;
 
-use Doctrine\Tests\Common\Annotations\True;
-
 class Helper {
 
   /**
